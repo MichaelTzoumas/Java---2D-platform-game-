@@ -1,11 +1,13 @@
 package entities;
-													//17:31
+													//21:33
 import static utils.Constants.Directions.DOWN;
 import static utils.Constants.Directions.LEFT;
 import static utils.Constants.Directions.RIGHT;
 import static utils.Constants.Directions.UP;
 import static utils.Constants.PlayerConstants.RUNNING;
 import static utils.Constants.PlayerConstants.STANDING;
+import static utils.Constants.PlayerConstants.*;
+
 import static utils.Constants.PlayerConstants.getSnapsAmount;
 
 import java.awt.Graphics;
@@ -21,7 +23,7 @@ public class Player extends Entity{
 	private int aniTick, aniIndex, aniSpeed =30;		//Φτιάχνω 3 μεταβλητές που θα τις χρεησιμοποιήσω στην χρήση animation
 	private int playerAction=STANDING;					//Φτιάχνω playerAction ανάλογα με την "φάση" του χαρακτήρα επιστρέφει Int apo 1-7
 	private boolean left, up, right, down;
-	private boolean moving=false;						//Φτιάχνω μια μεταβλητή που όταν κινήται ο χαρακτήρας ειναι true, οταν ειναι σταθερός, false
+	private boolean moving=false, attacking=false;						//Φτιάχνω μια μεταβλητή που όταν κινήται ο χαρακτήρας ειναι true, οταν ειναι σταθερός, false
 	private float playerSpeed=2.0f;
 	public Player(float x, float y) {
 		super(x, y);
@@ -71,19 +73,32 @@ public class Player extends Entity{
 		if(aniTick >= aniSpeed) {
 			aniTick=0;
 			aniIndex++;
-			if(aniIndex >= getSnapsAmount(playerAction))
+			if(aniIndex >= getSnapsAmount(playerAction)) {
+				attacking=false;
 				aniIndex=0;
+			}
 		}
 	}
 	
 		private void setAnimation() {
-			if(moving){ 
+			int startAni=playerAction;
+			
+			if(moving) 
 				playerAction=RUNNING;
-			}else{
+			else
 				playerAction=STANDING;
-			}
+				
+			if(attacking)
+				playerAction=ATTACK1;
+			if(startAni!=playerAction)
+				resetAniTick();
 		}
 		
+		private void resetAniTick() {
+			aniTick=0;
+			aniIndex=0;
+		}
+
 		private void updatePosition() {
 			moving=false;
 
@@ -103,7 +118,17 @@ public class Player extends Entity{
 						}
 	
 	}//updatePosition()
-
+		
+		public void resetDirBooleans() {
+			left=false;
+			right=false;
+			up=false;
+			down=false;
+		}
+		
+		public void setAttacking(boolean attacking) {
+			this.attacking=attacking;
+		}
 		public boolean isLeft() {
 			return left;
 		}
