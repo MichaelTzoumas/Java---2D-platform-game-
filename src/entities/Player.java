@@ -1,5 +1,5 @@
 package entities;
-													//21:33
+													
 import static utils.Constants.Directions.DOWN;
 import static utils.Constants.Directions.LEFT;
 import static utils.Constants.Directions.RIGHT;
