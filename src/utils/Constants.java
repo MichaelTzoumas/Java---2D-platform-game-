@@ -30,8 +30,9 @@ public class Constants{
 			case RUNNING:
 				return 3;
 			case ATTACK1:
-				return 3;
-			//case ATTACK2:5;
+				return 4;
+			case ATTACK2:
+				return 4;
 			//case JUMPATTACK1:5;
 			//case JUMPATTACK2:5;
 			//case INJURED:5;

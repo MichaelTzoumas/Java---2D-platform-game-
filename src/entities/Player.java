@@ -23,7 +23,7 @@ public class Player extends Entity{
 	private int aniTick, aniIndex, aniSpeed =30;		//Φτιάχνω 3 μεταβλητές που θα τις χρεησιμοποιήσω στην χρήση animation
 	private int playerAction=STANDING;					//Φτιάχνω playerAction ανάλογα με την "φάση" του χαρακτήρα επιστρέφει Int apo 1-7
 	private boolean left, up, right, down;
-	private boolean moving=false, attacking=false;						//Φτιάχνω μια μεταβλητή που όταν κινήται ο χαρακτήρας ειναι true, οταν ειναι σταθερός, false
+	private boolean moving=false, attacking=false, attacking2=false;						//Φτιάχνω μια μεταβλητή που όταν κινήται ο χαρακτήρας ειναι true, οταν ειναι σταθερός, false
 	private float playerSpeed=2.0f;
 	public Player(float x, float y) {
 		super(x, y);
@@ -39,7 +39,7 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		  g.drawImage(animations[playerAction][aniIndex],(int)x,(int)y,150,150, null);				//Εισάγω την εικόνα που θέλω στις συντεταγμενες xDelta και yDelta οι οποίες δυνονται απο το πληκτρολόγιο / Mouse μεσω των μεθόδων mouseMoved(e)& keyPressed(e) οποτε το αντικειμενο κινείται  
+		  g.drawImage(animations[playerAction][aniIndex],(int)x,(int)y,200,200, null);				//Εισάγω την εικόνα που θέλω στις συντεταγμενες xDelta και yDelta οι οποίες δυνονται απο το πληκτρολόγιο / Mouse μεσω των μεθόδων mouseMoved(e)& keyPressed(e) οποτε το αντικειμενο κινείται  
 			//μέθοδος drawImage(int img position x, int img position y,int img width, int img height, img observer);       
 			//μπορείς να ορίσεις και τις διαστάσεις της εικόνας στο 4ο κ 5ο όρισμα
 //repaint();									//Εμφανίζονται οι αλλαγές.(Το βάζω εδω για να μη χρειάζεται να το βάλω σε κάθε μέθοδο χωριστά setRectPos(),changeYDelta(),changeYDelta(int value))
@@ -50,7 +50,7 @@ public class Player extends Entity{
 		InputStream is=getClass().getResourceAsStream("/char.png");
 		try {										//Χρησιμοποιώ μια try catch σε περίπτωση που υπάρχει λάθος στην εισαγωγή εικόνας
 			BufferedImage img=ImageIO.read(is);
-			animations=new BufferedImage[3][5];				//Φτιάχνω ένα πίνακα idleAni 5 θέσεων γιατι η char.png στη 1η τη γραμμή έχει 5 snaps 												
+			animations=new BufferedImage[4][5];				//Φτιάχνω ένα πίνακα idleAni 5 θέσεων γιατι η char.png στη 1η τη γραμμή έχει 5 snaps 												
 			for(int j=0; j < animations.length; j++)
 				for(int i=0; i < animations[j].length; i++)
 					animations[j][i]=img.getSubimage(250*i,250*j,250,250);		//Κοβει απο την εικόνα subImg απο τη θέση 250*i  και την εμφανίζει σε μέγεθος 250*250 pixel 
@@ -75,6 +75,7 @@ public class Player extends Entity{
 			aniIndex++;
 			if(aniIndex >= getSnapsAmount(playerAction)) {
 				attacking=false;
+				attacking2=false;
 				aniIndex=0;
 			}
 		}
@@ -88,10 +89,14 @@ public class Player extends Entity{
 			else
 				playerAction=STANDING;
 				
-			if(attacking)
+			if(attacking) {
 				playerAction=ATTACK1;
 			if(startAni!=playerAction)
 				resetAniTick();
+			} else if(attacking2) {
+				playerAction=ATTACK2;
+			if(startAni!=playerAction)
+				resetAniTick();}
 		}
 		
 		private void resetAniTick() {
@@ -128,6 +133,9 @@ public class Player extends Entity{
 		
 		public void setAttacking(boolean attacking) {
 			this.attacking=attacking;
+		}
+		public void setAttacking2(boolean attacking2) {
+			this.attacking2=attacking2;
 		}
 		public boolean isLeft() {
 			return left;
